@@ -1,0 +1,30 @@
+package com.kafka.registration.producer;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.beans.factory.annotation.Value;
+
+import org.springframework.kafka.core.KafkaTemplate;
+
+import org.springframework.stereotype.Component;
+
+import com.kafka.registration.event.CustomerEvent;
+
+@Slf4j
+@Component
+@RequiredArgsConstructor
+public class CustomerEventProducer {
+
+	private final KafkaTemplate<String, Object> kafkaTemplate;
+
+	@Value("${customer.topic.registration}")
+	private String topic;
+
+	public void publish(CustomerEvent event) {
+
+		kafkaTemplate.send(topic, event.getCustomerCode(), event);
+
+		log.info("Customer Event Published : {}", event.getCustomerCode());
+	}
+}

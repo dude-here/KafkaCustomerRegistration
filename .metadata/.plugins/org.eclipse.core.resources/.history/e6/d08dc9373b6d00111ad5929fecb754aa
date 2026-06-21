@@ -1,0 +1,45 @@
+package com.kafka.registration.service.impl;
+
+import java.util.UUID;
+
+import org.springframework.stereotype.Service;
+
+import com.kafka.registration.dto.ApiResponse;
+import com.kafka.registration.dto.CustomerRegistrationRequest;
+import com.kafka.registration.event.CustomerEvent;
+import com.kafka.registration.producer.CustomerEventProducer;
+import com.kafka.registration.service.CustomerRegistrationService;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+@Service
+@RequiredArgsConstructor
+public class CustomerRegistrationServiceImpl implements CustomerRegistrationService {
+
+	private final CustomerEventProducer producer;
+	String correlationId =
+	        UUID.randomUUID().toString();
+	
+	log.info(
+	        "CorrelationId={} CustomerCode={}",
+	        correlationId,
+	        customerCode);
+
+	@Override
+	public ApiResponse<String> registerCustomer(CustomerRegistrationRequest request) {
+
+		String customerCode = "CUS-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
+
+		CustomerEvent event = CustomerEvent.builder().customerCode(customerCode).firstName(request.getFirstName())
+				.lastName(request.getLastName()).email(request.getEmail()).mobile(request.getMobile()).build();
+
+		producer.publish(event);
+
+		log.info("Registration Event Published : {}", customerCode);
+
+		return ApiResponse.<String>builder().success(true).message("Customer registration request accepted")
+				.data(customerCode).build();
+	}
+}

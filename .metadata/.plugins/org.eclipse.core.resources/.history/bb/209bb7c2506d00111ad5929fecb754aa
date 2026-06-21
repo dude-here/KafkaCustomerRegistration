@@ -1,0 +1,43 @@
+# Server
+server.port=8082
+
+# Application Name
+spring.application.name=customer-processing-service
+
+# Database Configuration
+spring.datasource.url=jdbc:mysql://localhost:3306/customer_management_db
+spring.datasource.username=root
+spring.datasource.password=jaydevrathod123
+
+# JPA Configuration
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.format_sql=true
+
+# Kafka Configuration
+spring.kafka.bootstrap-servers=localhost:9092
+
+# Kafka Consumer
+spring.kafka.consumer.group-id=customer-processing-group
+spring.kafka.consumer.auto-offset-reset=earliest
+spring.kafka.consumer.key-deserializer=org.apache.kafka.common.serialization.StringDeserializer
+spring.kafka.consumer.value-deserializer=org.springframework.kafka.support.serializer.JsonDeserializer
+
+spring.kafka.consumer.properties.spring.json.use.type.headers=false
+spring.kafka.consumer.properties.spring.json.value.default.type=com.kafka.consumer.dto.CustomerEvent
+
+# Kafka JSON Deserializer
+spring.kafka.consumer.properties.spring.json.trusted.packages=*
+
+# Mail Configuration
+spring.mail.host=smtp.gmail.com
+spring.mail.port=587
+spring.mail.username=jaydevrathod125@gmail.com
+spring.mail.password=J@ydev1234567890
+
+# SMTP Properties
+spring.mail.properties.mail.smtp.auth=true
+spring.mail.properties.mail.smtp.starttls.enable=true
+
+# Custom Topic Configuration
+customer.topic.registration=customer-registration-topic

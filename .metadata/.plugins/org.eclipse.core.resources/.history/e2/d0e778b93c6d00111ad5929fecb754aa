@@ -1,0 +1,35 @@
+package com.kafka.registration.controller;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
+import org.springframework.validation.annotation.Validated;
+
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.kafka.registration.dto.ApiResponse;
+import com.kafka.registration.dto.CustomerRegistrationRequest;
+import com.kafka.registration.service.CustomerRegistrationService;
+
+import jakarta.validation.Valid;
+
+import lombok.RequiredArgsConstructor;
+
+@RestController
+@RequestMapping("/api/customers")
+@RequiredArgsConstructor
+@Validated
+public class CustomerController {
+
+	private final CustomerRegistrationService service;
+
+	@PostMapping("/register")
+	public ResponseEntity<ApiResponse<?>> registerCustomer(
+			@Valid @RequestBody CustomerRegistrationRequest request) {
+
+		return ResponseEntity.status(HttpStatus.ACCEPTED).body(service.registerCustomer(request));
+	}
+}

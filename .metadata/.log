@@ -1,0 +1,13 @@
+!SESSION 2026-06-21 17:32:01.800 -----------------------------------------------
+eclipse.buildId=4.24.0.I20220607-0700
+java.version=17.0.9
+java.vendor=Eclipse Adoptium
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=en_IN
+Framework arguments:  -product org.eclipse.epp.package.java.product
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 -product org.eclipse.epp.package.java.product
+
+This is a continuation of log file C:\Users\JAYDEV RATHOD\eclipse-workspace\SpringBoot_Kafka_EmailService\.metadata\.bak_0.log
+Created Time: 2026-06-21 19:00:23.553
+
+!ENTRY org.eclipse.ui 2 2 2026-06-21 19:00:23.554
+!MESSAGE Invalid property category path: org.springframework.ide.eclipse.beans.ui.properties.ProjectPropertyPage (bundle: org.springframework.ide.eclipse.xml.namespaces, propertyPage: org.springframework.ide.eclipse.beans.ui.namespaces.projectPropertyPage)

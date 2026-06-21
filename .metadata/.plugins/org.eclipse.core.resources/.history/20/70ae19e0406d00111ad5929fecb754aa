@@ -1,0 +1,5 @@
+package com.kafka.consumer.service.impl;
+
+public class CustomerProcessingServiceImpl {
+
+}

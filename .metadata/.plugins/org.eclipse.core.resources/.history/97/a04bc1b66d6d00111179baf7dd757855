@@ -1,0 +1,10 @@
+package com.kafka.consumer.service;
+
+
+import com.kafka.consumer.dto.CustomerEvent;
+
+public interface CustomerProcessingService {
+
+    void processCustomer(
+            CustomerEvent event);
+}

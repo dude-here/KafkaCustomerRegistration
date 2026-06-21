@@ -1,0 +1,91 @@
+package com.kafka.consumer.service.impl;
+
+import org.springframework.stereotype.Service;
+
+import com.kafka.consumer.dto.CustomerEvent;
+
+import com.kafka.consumer.entity.AuditLog;
+import com.kafka.consumer.entity.Customer;
+import com.kafka.consumer.entity.EmailLog;
+import com.kafka.consumer.repository.AuditLogRepository;
+import com.kafka.consumer.repository.CustomerRepository;
+import com.kafka.consumer.repository.EmailLogRepository;
+import com.kafka.consumer.service.CustomerProcessingService;
+import com.kafka.consumer.service.EmailService;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.transaction.annotation.Transactional;
+
+@Transactional
+@Slf4j
+@Service
+@RequiredArgsConstructor
+public class CustomerProcessingServiceImpl implements CustomerProcessingService {
+
+	private final CustomerRepository customerRepository;
+
+	private final AuditLogRepository auditLogRepository;
+
+	private final EmailService emailService;
+
+	private final EmailLogRepository emailLogRepository;
+
+	@Transactional
+	@Override
+	public void processCustomer(CustomerEvent event) {
+
+		log.info("Processing Customer : {}", event.getCustomerCode());
+
+		if (customerRepository.existsByCustomerCode(event.getCustomerCode())) {
+
+			log.warn("Duplicate Customer Ignored : {}", event.getCustomerCode());
+
+			return;
+		}
+		
+		//PERSISTING regsitered CUSTOMER TO DATABASE 
+		Customer customer = Customer.builder().customerCode(event.getCustomerCode()).firstName(event.getFirstName())
+				.lastName(event.getLastName()).email(event.getEmail()).mobile(event.getMobile()).build();
+
+		customerRepository.save(customer);
+
+		
+		//PERSISTING TO EMAIL LOG AS CUSTOMER SUCCESSFULLY REGISTERED WITH STATUS PENDING OF SENDING MAIL TO CUSTOMER
+		EmailLog emailLog = EmailLog.builder().customerCode(customer.getCustomerCode()).email(customer.getEmail())
+				.subject("Customer Registration Successful").status("PENDING").build();
+		emailLogRepository.save(emailLog);
+
+		//PERSISTING TO AUDIT LOG,ONCE CUSTOMER IS REGISTERED SUCCESSFULLY 
+		AuditLog auditLog = AuditLog.builder().eventType("CUSTOMER_REGISTERED").customerCode(event.getCustomerCode())
+				.message("Customer saved successfully").build();
+		auditLogRepository.save(auditLog);
+
+		// ONCE AUDIT LOG AND EMAIL LOG PERSISTED AND THEN .....SENDING EMAIL + UPDATE STATUS TO EMAIL LOG DATABASE 
+		try {
+
+			emailService.sendRegistrationEmail(customer); //SENDING EMAIL TO CORRESPODNING CUSTOMER AFTER SUCCESSFULL REGISTRATION
+
+			emailLog.setStatus("SENT");
+
+			emailLogRepository.save(emailLog);//PERSISTED TO DB
+
+			log.info("Email Sent Successfully : {}", customer.getCustomerCode());
+
+		} catch (Exception ex) {
+
+			emailLog.setStatus("FAILED");
+
+			emailLogRepository.save(emailLog);
+
+			AuditLog failedAudit = AuditLog.builder().eventType("EMAIL_FAILED").customerCode(customer.getCustomerCode())
+					.message(ex.getMessage()).build();
+
+			auditLogRepository.save(failedAudit);
+
+			log.error("Email Sending Failed : {}", customer.getCustomerCode(), ex);
+		}
+
+		log.info("Customer Saved Successfully : {}", event.getCustomerCode());
+	}
+}

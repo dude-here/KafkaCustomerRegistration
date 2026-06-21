@@ -1,0 +1,9 @@
+package com.kafka.registration.service;
+
+
+
+public interface EmailService {
+
+    void sendRegistrationEmail(
+            Customer customer);
+}

@@ -1,0 +1,12 @@
+package com.kafka.consumer;
+
+@SpringBootApplication
+public class CustomerProcessingApplication {
+
+    public static void main(String[] args) {
+
+        SpringApplication.run(
+                CustomerProcessingApplication.class,
+                args);
+    }
+}

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename package &apos;com.kafka.processing&apos; to &apos;com.kafka.consumer&apos;&#x0D;&#x0A;- Original project: &apos;customer-processing-service&apos;&#x0D;&#x0A;- Original element: &apos;customer-processing-service/src/main/java/com.kafka.processing&apos;&#x0D;&#x0A;- Renamed element: &apos;customer-processing-service/src/main/java/com.kafka.consumer&apos;&#x0D;&#x0A;- Update references to refactored element&#x0D;&#x0A;- Update textual occurrences in comments and strings" description="Rename package &apos;com.kafka.processing&apos;" flags="589830" hierarchical="false" id="org.eclipse.jdt.ui.rename.package" input="/src\/main\/java=/optional=/true=/=/maven.pomderived=/true=/&lt;com.kafka.processing" name="com.kafka.consumer" qualified="false" references="true" stamp="1782025222661" textual="false" version="1.0"/>
+</session>

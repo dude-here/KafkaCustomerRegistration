@@ -1,0 +1,9 @@
+package com.kafka.registration.service;
+
+import com.kafka.registration.dto.ApiResponse;
+import com.kafka.registration.dto.CustomerRegistrationRequest;
+
+public interface CustomerRegistrationService {
+
+	ApiResponse<String> registerCustomer(CustomerRegistrationRequest request);
+}

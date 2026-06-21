@@ -1,0 +1,5 @@
+package com.kafka.consumer.repository;
+
+public interface AuditLogRepository {
+
+}

@@ -1,0 +1,5 @@
+package com.kafka.registration.producer;
+
+public class CustomerEventProducer {
+
+}

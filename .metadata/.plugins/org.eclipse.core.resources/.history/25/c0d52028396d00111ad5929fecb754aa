@@ -1,0 +1,5 @@
+package com.kafka.registration.config;
+
+public class OpenApiConfig {
+
+}

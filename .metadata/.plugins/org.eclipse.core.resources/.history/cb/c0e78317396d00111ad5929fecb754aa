@@ -1,0 +1,5 @@
+package com.kafka.registration.exception;
+
+public class GlobalExceptionHandler {
+
+}

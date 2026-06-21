@@ -1,0 +1,50 @@
+package com.kafka.registration.producer;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
+import java.util.concurrent.CompletableFuture;
+
+import org.springframework.beans.factory.annotation.Value;
+
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.support.SendResult;
+import org.springframework.stereotype.Component;
+
+import com.kafka.registration.event.CustomerEvent;
+
+@Slf4j
+@Component
+@RequiredArgsConstructor
+public class CustomerEventProducer {
+
+	private final KafkaTemplate<String, Object> kafkaTemplate;
+
+	@Value("${customer.topic.registration}") //topic defined in properties file
+	private String topic;
+
+	public void publish(CustomerEvent event) {
+
+		// kafkaTemplate.send(topic, event.getCustomerCode(), event);
+
+		CompletableFuture<SendResult<String, Object>> future = kafkaTemplate.send(topic, event.getCustomerCode(),
+				event);
+		future.whenComplete((result, ex) -> {
+
+			if (ex == null) {
+
+				log.info("Customer Event Delivered Successfully : {} Partition : {} Offset : {}",
+						event.getCustomerCode(), result.getRecordMetadata().partition(),
+						result.getRecordMetadata().offset());
+
+			} else {
+
+				log.error("Customer Event Delivery Failed : {}", event.getCustomerCode(), ex);
+
+			}
+
+		});
+
+		log.info("Customer Event Published : {}", event.getCustomerCode());
+	}
+}
